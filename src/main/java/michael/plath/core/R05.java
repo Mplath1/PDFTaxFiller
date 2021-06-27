@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static michael.plath.core.Constants.licenseeName;
+import static michael.plath.core.Constants.licenseeNumber;
 import static michael.plath.core.DataSet.getOrganizationListByType;
 
 public class R05 extends Form{
@@ -27,6 +29,8 @@ public class R05 extends Form{
 
             form.getField("Sheet." + schedule + ".Number").setValue(String.valueOf(1));
             form.getField("Sheet." + schedule + ".Total").setValue(String.valueOf(1));
+            form.getField("Info.Licensee.Name").setValue(licenseeName);
+            form.getField("Info.Licensee.Number").setValue(licenseeNumber);
             //form.getField("Sheet.Number").setPartialName(schedule + String.valueOf(1));
 
             /*
@@ -203,4 +207,23 @@ public class R05 extends Form{
 
         }
     }
+
+    public String[] getWholesaleTotals(){
+        String[] wholesaleTotals = {"0","0","0","0","0","0"};
+        double[] wholesaleDoubleTotals = {0,0,0,0,0,0};
+        for (Organization organization: getOrganizationListByType("Wholesale")) {
+            wholesaleDoubleTotals[1] += organization.totalGallonsLiquor;
+            wholesaleDoubleTotals[2] += organization.totalGallonsStill;
+            wholesaleDoubleTotals[4] += organization.totalGallonsSparkling;
+        }
+        for(int i=0; i<wholesaleTotals.length;i++){
+            wholesaleTotals[i] = String.valueOf(wholesaleDoubleTotals[i]);
+        }
+
+        return  wholesaleTotals;
+    }
+
+
+
+
 }

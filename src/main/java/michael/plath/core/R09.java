@@ -4,6 +4,9 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import java.io.File;
 
+import static michael.plath.core.Constants.licenseeName;
+import static michael.plath.core.Constants.licenseeNumber;
+
 public class R09 extends Form{
     public R09(){
         resourceFileName = "r09.pdf";
@@ -18,6 +21,8 @@ public class R09 extends Form{
 
             form.getField("Sheet."+ schedule + ".Number").setValue(String.valueOf(1));
             form.getField("Sheet."+ schedule + ".Total").setValue(String.valueOf(1));
+            form.getField("Info.Licensee.Name").setValue(licenseeName);
+            form.getField("Info.Licensee.Number").setValue(licenseeNumber);
 
 
 

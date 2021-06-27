@@ -2,27 +2,20 @@ package michael.plath.core;
 
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDDocumentCatalog;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.interactive.action.PDActionHide;
-import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
-import org.apache.pdfbox.pdmodel.interactive.form.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import static michael.plath.core.DataSet.getOrganizationListByType;
-import static michael.plath.core.DataSet.organizationList;
+import java.util.Properties;
 
 
 public class Main {
 
     public static void main(String[] args){
+
+        //load properties
+        Constants constants = new Constants();
 
         //create new source
         FileSource ourData = new FileSourceImpl();
@@ -31,26 +24,26 @@ public class Main {
         ourData.connect();
         FileInputStream dataStream = ourData.getData();
         //arrange and calculate data
-        DataSorterImpl dataSorter = new DataSorterImpl(dataStream);
+        NJDataSorter dataSorter = new NJDataSorter(dataStream);
         DataSet dataSet = new DataSetImpl(dataSorter);
         dataSet.getDataSorter().sort();
-        
 
-            //use builder for overall NJ Bi-Monthly Tax Prep
-            //FIX ROUNDING. ALSO ACCOUNT FOR NEGATIVES
+
+        //use builder for overall NJ Bi-Monthly Tax Prep
+            //FIX ROUNDING. ALSO ACCOUNT FOR NEGATIVES. if total is negative set to zero and move negative number to returns.
+            // only calculate invoices for retailers. credits should be calculated returns
+            //correct dates. build GUI
 
         //should be form factory. abstract factory once states are added
         //R02(last) R12 R08 R05 R09 R10 R57
 
-        Form R12 = new R12(); //works. correct sheetTotal to 2
         Form R08 = new R08(); //works, terrible design though
         Form R05 = new R05(); //works
         Form R09 = new R09(); //works
         Form R10 = new R10(); //works
         Form R57 = new R57(); //works
         Form R02 = new R02(); //work in progress
-        R12.loadForm();
-        R12.build();
+        Form R12 = new R12(); //works. correct sheetTotal to 2 Returns go on H3 form. complete this after R08 & R05 & R02
         R08.loadForm();
         R08.build();
         R05.loadForm();
@@ -63,6 +56,10 @@ public class Main {
         R57.build();
         R02.loadForm();
         R02.build();
+        R12.loadForm();
+        R12.build();
+        R57.displayAllFields();
+
         //merge complete forms
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
         try {
@@ -75,6 +72,8 @@ public class Main {
             mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\Tester\\" + R57.resourceFileName));
             mergerUtility.setDestinationFileName("C:\\USAWine\\New Jersey\\Tester\\CompleteTaxForm.pdf");
             mergerUtility.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+            //need to replace dummy fields
+
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
@@ -97,4 +96,26 @@ public class Main {
 
 
     }
+
+    public static Properties readPropertiesFile(String filename) throws IOException {
+        FileInputStream fileInputStream = null;
+        Properties properties = null;
+        try{
+            fileInputStream = new FileInputStream(filename);
+            properties = new Properties();
+            properties.load(fileInputStream);
+        }catch(FileNotFoundException e){
+            System.out.println(e.getMessage());
+
+        }finally {
+            fileInputStream.close();
+        }
+
+        return properties;
+
+
+
+    }
+
+
 }

@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import static michael.plath.core.Constants.licenseeName;
+import static michael.plath.core.Constants.licenseeNumber;
 import static michael.plath.core.DataSet.getOrganizationListByType;
 
 public class R08 extends Form{
@@ -85,32 +87,32 @@ public class R08 extends Form{
                     extraFields.getField("Sheet."+ schedule + ".Number").setValue(String.valueOf(numberOfExtraPages + 2));
                     for (int j = 0; j < (24 - fieldCounter); j++) {
                         extraField = extraFields.getField("Retailer.License." + (fieldCounter + j));
-                        //extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
                         extraField = extraFields.getField("Retailer.Name." + (fieldCounter + j));
-                        //extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
 
                         extraField = extraFields.getField("Retailer.Liquor." + (fieldCounter + j));
-                        //extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
                         extraField = extraFields.getField("Retailer.StillWine." + (fieldCounter + j));
-                        //extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
                         extraField = extraFields.getField("Retailer.Vermouth." + (fieldCounter + j));
-                        //extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
                         extraField = extraFields.getField("Retailer.SparklingWine." + (fieldCounter + j));
-                        //extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
                         extraField = extraFields.getField("Retailer.AppleCider." + (fieldCounter + j));
-                        //extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
                         extraCounter++;
@@ -120,14 +122,6 @@ public class R08 extends Form{
 
             }
             //}
-
-            Iterator<PDField> iterator = otherDoc.getDocumentCatalog().getAcroForm().getFieldIterator();
-            while(iterator.hasNext()){
-                System.out.println(iterator.next().getFullyQualifiedName());
-            }
-
-            System.out.println("============");
-            displayAllFields();
 
             //MUST BE FIXED TO PREVENT UNEEDED PAGES
             //create mergeUtility and add first page plus any extra pages
@@ -187,6 +181,8 @@ public class R08 extends Form{
             */
 
             form.getField("Sheet."+ schedule + ".Total").setValue(String.valueOf(numberOfExtraPages + 2));//R08(2 pages) + extra
+            form.getField("Info.Licensee.Name").setValue(licenseeName);
+            form.getField("Info.Licensee.Number").setValue(licenseeNumber);
 
 
             List<Organization> retailers = getOrganizationListByType("Retail");
@@ -240,6 +236,25 @@ public class R08 extends Form{
 
 
         }
+    }
+
+    //should be deprecated but due to doc merge creating dummyFields is needed
+    public String[] getRetailTotals(){
+        String[] retailTotals = {"0","0","0","0","0","0"};
+        retailTotals[1] = form.getField("Retailer.Liquor.AllRetail").getValueAsString();
+        retailTotals[2] = form.getField("Retailer.StillWine.AllRetail").getValueAsString();
+        retailTotals[4] = form.getField("Retailer.SparklingWine.AllRetail").getValueAsString();
+
+        return  retailTotals;
+    }
+
+    //should be deprecated but due to doc merge creating dummyFields is needed
+    public String[] getSampleTotals(){
+        String[] sampleTotals = {"0","0","0","0","0","0"};
+        sampleTotals[1] = form.getField("Retailer.Liquor.Samples").getValueAsString();
+        sampleTotals[2] = form.getField("Retailer.StillWine.Samples").getValueAsString();
+        sampleTotals[4] = form.getField("Retailer.SparklingWine.Samples").getValueAsString();
+        return  sampleTotals;
     }
 
 

@@ -12,12 +12,12 @@ import java.util.Iterator;
 import static michael.plath.core.DataSet.organizationList;
 import static michael.plath.core.DataSet.portfolioList;
 
-public class DataSorterImpl extends DataSorter{
+public class NJDataSorter extends DataSorter{
     FileInputStream fileInputStream;
     OrganizationFactory organizationFactory;
 
 
-    public DataSorterImpl(FileInputStream fileInputStream){
+    public NJDataSorter(FileInputStream fileInputStream){
         this.fileInputStream = fileInputStream;
         organizationFactory = new OrganizationFactory();
     }
