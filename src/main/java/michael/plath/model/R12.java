@@ -126,4 +126,8 @@ public class R12 extends Form{
             System.out.println(e.getMessage());
         }
     }
+
+    void fill() {
+
+    }
 }

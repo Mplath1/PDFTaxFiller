@@ -51,6 +51,8 @@ public class NJBiMonthlyTax extends PreparedForm{
         Form R12 = new R12(); //works. correct sheetTotal to 2 Returns go on H3 form. complete this after R08 & R05 & R02
         R08.loadForm();
         R08.build();
+        R08.clean();
+        R08.fill();
         R05.loadForm();
         R05.build();
         R09.loadForm();
@@ -63,8 +65,6 @@ public class NJBiMonthlyTax extends PreparedForm{
         R02.build();
         R12.loadForm();
         R12.build();
-        R57.displayAllFields();
-
         //merge complete forms
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
         try {

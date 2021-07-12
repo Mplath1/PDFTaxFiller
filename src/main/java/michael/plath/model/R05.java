@@ -194,6 +194,9 @@ public class R05 extends Form{
                 form.getField("Wholesaler.SparklingWine." + i).setValue(String.valueOf(wholesalers.get(i).totalGallonsSparkling));
                 totalGallons[4] += wholesalers.get(i).totalGallonsSparkling;
 
+                System.out.println("\n" + wholesalers.get(i).getName() + "\n\tL:" + wholesalers.get(i).totalGallonsLiquor + "\n\tSt:"
+                        + wholesalers.get(i).totalGallonsStill + "\n\tSp:" + wholesalers.get(i).totalGallonsSparkling);
+
             }
 
             System.out.println(totalGallons[1] + " " + totalGallons[2] + " " + totalGallons[4]);
@@ -206,6 +209,11 @@ public class R05 extends Form{
             System.out.println(e.getMessage());
 
         }
+    }
+
+
+    void fill() {
+
     }
 
     public String[] getWholesaleTotals(){

@@ -71,4 +71,8 @@ public class R02 extends Form{
             System.out.println(e.getMessage());
         }
     }
+
+    void fill() {
+
+    }
 }

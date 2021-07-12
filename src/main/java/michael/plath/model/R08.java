@@ -9,6 +9,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static michael.plath.model.Constants.licenseeName;
@@ -24,143 +26,133 @@ public class R08 extends Form{
     public void build() {
         try {
             String schedule = "D";
+            PDDocument producedDoc = doc;
             PDField field;
 
-            //check if extra page is needed. Will need to rename fields and add page if required
+
+            //save original root names and count here in an array for use when renaming
+
             // void createCorrectPage(int numberOfRetailers){
             int totalRetailers = getOrganizationListByType("Retail").size();
-           // PDDocument otherDoc = PDDocument.load(new File("C:\\USAWine\\New Jersey\\NJForms\\r08ExtraPage.pdf"));
-            //PDDocument otherDoc = PDDocument.load(in);
+
+            //IF MORE THEN 44 AN ADDITIONAL SHEET NEEDED. totalRetailers - 20 - (24 * extraPagesNeeded) = 0
+            int extraRetailers = (totalRetailers - 20 - 24);
+            int extraPagesNeeded = 0;
+            PDFMergerUtility mergerUtility = new PDFMergerUtility();
+            if(extraRetailers > 0) {
+
+                if ((extraRetailers % 24) != 0) {
+                    extraPagesNeeded = (extraRetailers/24) + 1;
+                }else{
+                    extraPagesNeeded = extraRetailers/24;
+                }
+            }
+
+            producedDoc.save(new File("src\\main\\resources\\forms\\NJ\\temp\\original.pdf"));
+
             PDDocument otherDoc = doc;
+            PDAcroForm fields = otherDoc.getDocumentCatalog().getAcroForm();
 
-            //load extra page and set field name&numbers
-            PDAcroForm extraFields = otherDoc.getDocumentCatalog().getAcroForm();
-            int extraCounter = 44; //DEFINE FINAL ELSEWHERE
-            int fieldCounter = 0; //only 24 per page DEFINE FINAL ELSEWHERE
-            int numberOfExtraPages = 1; //create a clever algorithm for this
-            PDField extraField = null;
-            while (extraCounter < totalRetailers) { //DEFINE FIELD NAMES AS FINAL ELSEWHERE
-                extraField = extraFields.getField("Retailer.License." + fieldCounter);
-                extraField.setPartialName(String.valueOf(extraCounter));
-                extraField.setValue(extraField.getFullyQualifiedName());
+            int counter = 44;
+            int fieldCounter = 0;
+            while(counter < totalRetailers){
+                field = fields.getField("Retailer.License." + fieldCounter);
+                field.setPartialName(String.valueOf(counter));
+                //field.setValue(field.getFullyQualifiedName());
 
-                extraField = extraFields.getField("Retailer.Name." + fieldCounter);
-                extraField.setPartialName(String.valueOf(extraCounter));
-                extraField.setValue(extraField.getFullyQualifiedName());
+                field = fields.getField("Retailer.Name." + fieldCounter);
+                field.setPartialName(String.valueOf(counter));
+                //field.setValue(field.getFullyQualifiedName());
 
 
-                extraField = extraFields.getField("Retailer.Liquor." + fieldCounter);
-                extraField.setPartialName(String.valueOf(extraCounter));
-                extraField.setValue(extraField.getFullyQualifiedName());
+                field = fields.getField("Retailer.Liquor." + fieldCounter);
+                field.setPartialName(String.valueOf(counter));
+                //field.setValue(field.getFullyQualifiedName());
 
-                extraField = extraFields.getField("Retailer.StillWine." + fieldCounter);
-                extraField.setPartialName(String.valueOf(extraCounter));
-                extraField.setValue(extraField.getFullyQualifiedName());
+                field = fields.getField("Retailer.StillWine." + fieldCounter);
+                field.setPartialName(String.valueOf(counter));
+                //field.setValue(field.getFullyQualifiedName());
 
-                extraField = extraFields.getField("Retailer.Vermouth." + fieldCounter);
-                extraField.setPartialName(String.valueOf(extraCounter));
-                extraField.setValue(extraField.getFullyQualifiedName());
+                field = fields.getField("Retailer.Vermouth." + fieldCounter);
+                field.setPartialName(String.valueOf(counter));
+                //field.setValue(field.getFullyQualifiedName());
 
-                extraField = extraFields.getField("Retailer.SparklingWine." + fieldCounter);
-                extraField.setPartialName(String.valueOf(extraCounter));
-                extraField.setValue(extraField.getFullyQualifiedName());
+                field = fields.getField("Retailer.SparklingWine." + fieldCounter);
+                field.setPartialName(String.valueOf(counter));
+                //field.setValue(field.getFullyQualifiedName());
 
-                extraField = extraFields.getField("Retailer.AppleCider." + fieldCounter);
-                extraField.setPartialName(String.valueOf(extraCounter));
-                extraField.setValue(extraField.getFullyQualifiedName());
+                field = fields.getField("Retailer.AppleCider." + fieldCounter);
+                field.setPartialName(String.valueOf(counter));
+                //field.setValue(field.getFullyQualifiedName());
 
                 fieldCounter++;
-                extraCounter++;
+                counter++;
+
                 if (fieldCounter == 24) { //end of extra page.save.close.reset field counter.load new doc anc acroform
                     //extraFields.getField("Sheet."+ schedule + ".Number").setValue(String.valueOf(numberOfExtraPages + 2));
-                    otherDoc.save(new File("C:\\USAWine\\New Jersey\\ExtraPage" + numberOfExtraPages + ".pdf"));
-                    otherDoc.close();
-                    numberOfExtraPages++;
+                    //otherDoc.addPage(otherDoc.getPage(0)); //use add page not import always
+                    otherDoc.removePage(1);
+                    otherDoc.save(new File("src\\main\\resources\\forms\\NJ\\temp\\" + extraPagesNeeded + ".pdf"));
+                    extraPagesNeeded--;
                     fieldCounter = 0;
-                    otherDoc = PDDocument.load(new File("C:\\USAWine\\New Jersey\\NJForms\\r08ExtraPage.pdf"));
 
-                    extraFields = otherDoc.getDocumentCatalog().getAcroForm();
+                    otherDoc = PDDocument.load(new File("src\\main\\resources\\forms\\NJ\\temp\\original.pdf")); //loads with fields starting at 44 no matter what!!!!!!!
+                    fields = otherDoc.getDocumentCatalog().getAcroForm();
 
                 }
-                if (extraCounter == totalRetailers) {//end of retailers.change remaining fields to unused and save
+                if (counter == totalRetailers) {//end of retailers.change remaining fields to unused and save
                     //extraFields.getField("Sheet."+ schedule + ".Number").setValue(String.valueOf(numberOfExtraPages + 2));
                     for (int j = 0; j < (24 - fieldCounter); j++) {
-                        extraField = extraFields.getField("Retailer.License." + (fieldCounter + j));
-                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        field = fields.getField("Retailer.License." + (fieldCounter + j));
+                        field.setPartialName("UNUSED" + String.valueOf(counter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
-                        extraField = extraFields.getField("Retailer.Name." + (fieldCounter + j));
-                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        field = fields.getField("Retailer.Name." + (fieldCounter + j));
+                        field.setPartialName("UNUSED" + String.valueOf(counter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
-
-                        extraField = extraFields.getField("Retailer.Liquor." + (fieldCounter + j));
-                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        field = fields.getField("Retailer.Liquor." + (fieldCounter + j));
+                        field.setPartialName("UNUSED" + String.valueOf(counter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
-                        extraField = extraFields.getField("Retailer.StillWine." + (fieldCounter + j));
-                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        field = fields.getField("Retailer.StillWine." + (fieldCounter + j));
+                        field.setPartialName("UNUSED" + String.valueOf(counter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
-                        extraField = extraFields.getField("Retailer.Vermouth." + (fieldCounter + j));
-                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        field = fields.getField("Retailer.Vermouth." + (fieldCounter + j));
+                        field.setPartialName("UNUSED" + String.valueOf(counter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
-                        extraField = extraFields.getField("Retailer.SparklingWine." + (fieldCounter + j));
-                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        field = fields.getField("Retailer.SparklingWine." + (fieldCounter + j));
+                        field.setPartialName("UNUSED" + String.valueOf(counter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
-                        extraField = extraFields.getField("Retailer.AppleCider." + (fieldCounter + j));
-                        extraField.setPartialName("UNUSED" + String.valueOf(extraCounter));
+                        field = fields.getField("Retailer.AppleCider." + (fieldCounter + j));
+                        field.setPartialName("UNUSED" + String.valueOf(counter));
                         //extraField.setValue(extraField.getFullyQualifiedName());
 
-                        extraCounter++;
+                        counter++;
                     }
-                    otherDoc.save(new File("C:\\USAWine\\New Jersey\\ExtraPage" + numberOfExtraPages + ".pdf"));
+                    otherDoc.removePage(1);
+                    otherDoc.save(new File("src\\main\\resources\\forms\\NJ\\temp\\" + extraPagesNeeded + ".pdf"));
+                    //otherDoc.save(new File("C:\\USAWine\\New Jersey\\ExtraPageTEST.pdf"));
                 }
-
             }
-            //}
+            //end of create form method here
 
-            //MUST BE FIXED TO PREVENT UNEEDED PAGES
-            //create mergeUtility and add first page plus any extra pages
-            PDFMergerUtility mergerUtility = new PDFMergerUtility();
-            //mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\NJForms\\r08.pdf"));
-            mergerUtility.addSource(new File("C:\\Users\\Michael\\Desktop\\Programming\\Projects\\PDFTaxFiller\\src\\main\\resources\\forms\\NJ\\r08.pdf"));
-            for (int i = 1; i < (numberOfExtraPages + 1); i++) {
-                mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\ExtraPage" + i + ".pdf"));
-            }
-            //set destination of merge. merge. load merged document with all combined pages/fields
-            mergerUtility.setDestinationFileName("C:\\USAWine\\New Jersey\\TESTMERGE.pdf");
-            mergerUtility.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly()); //merge works
-            doc = PDDocument.load(new File("C:\\USAWine\\New Jersey\\TESTMERGE.pdf"));
-            form = doc.getDocumentCatalog().getAcroForm();
-            form.getField("Sheet."+ schedule + ".Number").setValue(String.valueOf(1));
-
-            doc.save(new File("C:\\USAWine\\New Jersey\\TESTMERGE.pdf"));
-
-
-            //rename auto-named "dummyFieldName" root/parent fields in additional pages to correct names
-            int dummyFieldCounter = 1; //fix this and use an array
-            for (int i = 0; i < numberOfExtraPages; i++) {
-                field = form.getField("dummyFieldName" + dummyFieldCounter);
-                field.setPartialName("Info");
-                //field.setValue("WORKED " + field.getFullyQualifiedName());
-                dummyFieldCounter++;
-                field = form.getField("dummyFieldName" + dummyFieldCounter);
-                field.setPartialName("Year");
-                //field.setValue("WORKED " + field.getFullyQualifiedName());
-                dummyFieldCounter++;
-                //field = form.getField("dummyFieldName" + dummyFieldCounter);
-                field.setPartialName("Sheet");
-                //field.setValue("WORKED " + field.getFullyQualifiedName());
-                dummyFieldCounter++;
-                field = form.getField("dummyFieldName" + dummyFieldCounter);
-                field.setPartialName("Retailer");
-                //field.setValue("WORKED " + field.getFullyQualifiedName());
-                dummyFieldCounter++;
-            }
-            //}
+            //turn this into merge utility private function
+            merge();
+            /*try {
+                mergerUtility.addSource(new File("src\\main\\resources\\forms\\" + stateCode + "\\temp\\original.pdf"));
+                extraPagesNeeded = (extraRetailers/24) + 1;
+                for(int i = extraPagesNeeded; i > 0; i--) {
+                    mergerUtility.addSource(new File("src\\main\\resources\\forms\\" + stateCode + "\\temp\\" + i + ".pdf"));
+                }
+                mergerUtility.setDestinationFileName(String.valueOf(new File("src\\main\\resources\\forms\\" + stateCode + "\\temp\\" + resourceFileName)));
+                mergerUtility.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+            }catch(IOException e){
+                System.out.println(e.getMessage());
+            }*/
 
             /*
             Info.Month. (Start/End)
@@ -179,61 +171,38 @@ public class R08 extends Form{
             Retailer.AppleCider.# (or AllRetail/Theft/Samples/Breakage/Other/Adjustment/Control)
             */
 
-            form.getField("Sheet."+ schedule + ".Total").setValue(String.valueOf(numberOfExtraPages + 2));//R08(2 pages) + extra
-            form.getField("Info.Licensee.Name").setValue(licenseeName);
-            form.getField("Info.Licensee.Number").setValue(licenseeNumber);
+            //field rename private method
+            doc = PDDocument.load(new File("src\\main\\resources\\forms\\NJ\\temp\\R08.pdf"));
+            form = doc.getDocumentCatalog().getAcroForm();
+            fieldRootNames = doc.getDocumentCatalog().getAcroForm().getFields();
+            Iterator<PDField> iterator = fieldRootNames.listIterator();
+            while(iterator.hasNext()){
+                int dummyFieldNumber = 4;
+                field = iterator.next();
+                if(field.getFullyQualifiedName().contains("dummyFieldName")){
+                    switch(dummyFieldNumber % 4) {
+                        case 0:
+                        field.setPartialName("Retailer");
+                        break;
+                        case 1:
+                            field.setPartialName("Info");
+                            break;
+                        case 2:
+                            field.setPartialName("Year");
+                            break;
+                        case 3:
+                            field.setPartialName("Sheet");
+                            break;
+                        default:
+                            break;
+                    }
 
-
-            List<Organization> retailers = getOrganizationListByType("Retail");
-            double totalGallons[] = {0, 0, 0, 0, 0, 0};
-
-            //populate fields with retailer info
-            for (int i = 0; i < retailers.size(); i++) {
-                field = form.getField("Retailer.License." + i);
-                form.getField("Retailer.License." + i).setValue(retailers.get(i).getLicense());
-                PDTextField textField = (PDTextField) form.getField("Retailer.Name." + i);
-                textField.setMultiline(true); //set multiline to true for addresses
-                textField.setDefaultAppearance("/Helv 0 Tf 0 g"); //autoSize CHANGE FORM FIELD SIZE USING ADOBE
-                form.getField("Retailer.Name." + i).setValue(retailers.get(i).getName() + "\n" + retailers.get(i).getAddress());
-                //form.getField("Retailer.BeerAndMalt." + i).setValue(0.0);
-                //ADD CHECK FOR NEGATIVE VALUES HERE
-                form.getField("Retailer.Liquor." + i).setValue(String.valueOf(retailers.get(i).totalGallonsLiquor));
-                totalGallons[1] += retailers.get(i).totalGallonsLiquor;
-                form.getField("Retailer.StillWine." + i).setValue(String.valueOf(retailers.get(i).totalGallonsStill));
-                totalGallons[2] += retailers.get(i).totalGallonsStill;
-                //form.getField("Retailer.Vermouth." + i).setValue(String.valueOf(0.0));
-                form.getField("Retailer.SparklingWine." + i).setValue(String.valueOf(retailers.get(i).totalGallonsSparkling));
-                totalGallons[4] += retailers.get(i).totalGallonsSparkling;
-
+                }
+                dummyFieldNumber++;
             }
-            //populate totals
-            form.getField("Retailer.Liquor.AllRetail").setValue(String.valueOf(totalGallons[1]));
-            form.getField("Retailer.StillWine.AllRetail").setValue(String.valueOf(totalGallons[2]));
-            form.getField("Retailer.SparklingWine.AllRetail").setValue(String.valueOf(totalGallons[4]));
-
-            double sampleGallons[] = {0, 0, 0, 0, 0, 0};
-            for (Organization organization : getOrganizationListByType("Sample")) {
-                sampleGallons[1] += organization.totalGallonsLiquor;
-                sampleGallons[2] += organization.totalGallonsStill;
-                sampleGallons[4] += organization.totalGallonsSparkling;
-            }
-            form.getField("Retailer.Liquor.Samples").setValue(String.valueOf(sampleGallons[1]));
-            form.getField("Retailer.StillWine.Samples").setValue(String.valueOf(sampleGallons[2]));
-            form.getField("Retailer.SparklingWine.Samples").setValue(String.valueOf(sampleGallons[4]));
-
-            form.getField("Retailer.Liquor.Control").setValue(String.valueOf(totalGallons[1] + sampleGallons[1]));
-            form.getField("Retailer.StillWine.Control").setValue(String.valueOf(totalGallons[2] + sampleGallons[2]));
-            form.getField("Retailer.SparklingWine.Control").setValue(String.valueOf(totalGallons[4] + sampleGallons[4]));
-
-
-            System.out.println(totalGallons[1] + " " + totalGallons[2] + " " + totalGallons[4]);
-
-            //save final document and close
-            doc.save(new File("C:\\USAWine\\New Jersey\\Tester\\" + resourceFileName));
-            doc.close();
 
         } catch (IOException e) {
-
+            System.out.println(e.getMessage());
 
         }
     }
@@ -255,6 +224,99 @@ public class R08 extends Form{
         sampleTotals[2] = form.getField("Retailer.StillWine.Samples").getValueAsString();
         sampleTotals[4] = form.getField("Retailer.SparklingWine.Samples").getValueAsString();
         return  sampleTotals;
+    }
+
+    //WORKS. REMOVE FROM BUILD SECTION
+    public void fill(){
+        try{
+        doc = PDDocument.load(new File("src\\main\\resources\\forms\\NJ\\temp\\R08.pdf"));
+        form = doc.getDocumentCatalog().getAcroForm();
+        fieldRootNames = doc.getDocumentCatalog().getAcroForm().getFields();
+        Iterator<PDField> iterator = fieldRootNames.listIterator();
+        PDField field = null;
+        while(iterator.hasNext()){
+            int dummyFieldNumber = 4;
+            field = iterator.next();
+            if(field.getFullyQualifiedName().contains("dummyFieldName")){
+                switch(dummyFieldNumber % 4) {
+                    case 0:
+                        field.setPartialName("Retailer");
+                        break;
+                    case 1:
+                        field.setPartialName("Info");
+                        break;
+                    case 2:
+                        field.setPartialName("Year");
+                        break;
+                    case 3:
+                        field.setPartialName("Sheet");
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            dummyFieldNumber++;
+        }
+        //form.getField("Sheet."+ schedule + ".Total").setValue(String.valueOf(numberOfExtraPages + 2));//R08(2 pages) + extra
+
+        form.getField("Info.Licensee.Name").setValue(licenseeName);
+        form.getField("Info.Licensee.Number").setValue(licenseeNumber);
+
+        List<Organization> retailers = getOrganizationListByType("Retail");
+        double totalGallons[] = {0, 0, 0, 0, 0, 0};
+
+        //populate fields with retailer info
+        for (int i = 0; i < retailers.size(); i++) {
+            field = form.getField("Retailer.License." + i);
+            form.getField("Retailer.License." + i).setValue(retailers.get(i).getLicense());
+            PDTextField textField = (PDTextField) form.getField("Retailer.Name." + i);
+            textField.setMultiline(true); //set multiline to true for addresses
+            textField.setDefaultAppearance("/Helv 0 Tf 0 g"); //autoSize CHANGE FORM FIELD SIZE USING ADOBE
+            form.getField("Retailer.Name." + i).setValue(retailers.get(i).getName() + "\n" + retailers.get(i).getAddress());
+            //form.getField("Retailer.BeerAndMalt." + i).setValue(0.0);
+            //ADD CHECK FOR NEGATIVE VALUES HERE
+            form.getField("Retailer.Liquor." + i).setValue(String.valueOf(retailers.get(i).totalGallonsLiquor));
+            totalGallons[1] += retailers.get(i).totalGallonsLiquor;
+            form.getField("Retailer.StillWine." + i).setValue(String.valueOf(retailers.get(i).totalGallonsStill));
+            totalGallons[2] += retailers.get(i).totalGallonsStill;
+            //form.getField("Retailer.Vermouth." + i).setValue(String.valueOf(0.0));
+            form.getField("Retailer.SparklingWine." + i).setValue(String.valueOf(retailers.get(i).totalGallonsSparkling));
+            totalGallons[4] += retailers.get(i).totalGallonsSparkling;
+            System.out.println("\n" + retailers.get(i).getName() + "\n\tL:" + retailers.get(i).totalGallonsLiquor + "\n\tSt:"
+                    + retailers.get(i).totalGallonsStill + "\n\tSp:" + retailers.get(i).totalGallonsSparkling);
+
+        }
+        //populate totals
+        form.getField("Retailer.Liquor.AllRetail").setValue(String.valueOf(totalGallons[1]));
+        form.getField("Retailer.StillWine.AllRetail").setValue(String.valueOf(totalGallons[2]));
+        form.getField("Retailer.SparklingWine.AllRetail").setValue(String.valueOf(totalGallons[4]));
+
+        double sampleGallons[] = {0, 0, 0, 0, 0, 0};
+        for (Organization organization : getOrganizationListByType("Sample")) {
+            sampleGallons[1] += organization.totalGallonsLiquor;
+            sampleGallons[2] += organization.totalGallonsStill;
+            sampleGallons[4] += organization.totalGallonsSparkling;
+        }
+        form.getField("Retailer.Liquor.Samples").setValue(String.valueOf(sampleGallons[1]));
+        form.getField("Retailer.StillWine.Samples").setValue(String.valueOf(sampleGallons[2]));
+        form.getField("Retailer.SparklingWine.Samples").setValue(String.valueOf(sampleGallons[4]));
+
+        form.getField("Retailer.Liquor.Control").setValue(String.valueOf(totalGallons[1] + sampleGallons[1]));
+        form.getField("Retailer.StillWine.Control").setValue(String.valueOf(totalGallons[2] + sampleGallons[2]));
+        form.getField("Retailer.SparklingWine.Control").setValue(String.valueOf(totalGallons[4] + sampleGallons[4]));
+
+
+        System.out.println(totalGallons[1] + " " + totalGallons[2] + " " + totalGallons[4]);
+
+        //save final document and close
+        doc.save(new File("C:\\USAWine\\New Jersey\\Tester\\" + resourceFileName));
+        doc.close();
+
+    } catch (IOException e) {
+        System.out.println(e.getMessage());
+
+    }
     }
 
 

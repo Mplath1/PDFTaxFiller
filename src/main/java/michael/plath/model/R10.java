@@ -28,4 +28,8 @@ public class R10 extends Form{
             System.out.println(e.getMessage());
         }
     }
+
+    void fill() {
+
+    }
 }

@@ -30,6 +30,7 @@ public class Main extends Application {
         //FILL RETURN FORMS AND OTHER FORMS PROPERLY. TEST WITH OTHER DATA
         //FIX R08 PAGES ISSUES.
         //ADD PROPERTIES FOR FILE OUTPUT PATHS
+        //ADD TABLEVIEW WITH CHECKBOXES AFTER LOADING DATASET
 
         //TURN INTO TWO COMBOBOXES.STATE AND FORM TYPE. LOAD DATA FROM ELSEWHERE
         String[] selectableFormNames = {"New Jersey Bi-Monthly Tax", "New York Monthly Tax", "California Tax"};
