@@ -23,6 +23,7 @@
         <apache-poi.version>5.0.0</apache-poi.version>
         <apache-poi-ooxml.version>5.0.0</apache-poi-ooxml.version>
         <dev-tools.version>2.4.5</dev-tools.version>
+        <json.version>20230227</json.version>
     </properties>
 
     <dependencies>
@@ -97,6 +98,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <version>${dev-tools.version}</version>
+        </dependency>
+        <!--JSON-->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
         </dependency>
     </dependencies>
 
