@@ -15,6 +15,7 @@ public class R05 extends Form{
         public R05(){
             resourceFileName = "r05.pdf";
             stateCode = "NJ";
+            outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\";
         }
 
 
@@ -202,7 +203,7 @@ public class R05 extends Form{
             System.out.println(totalGallons[1] + " " + totalGallons[2] + " " + totalGallons[4]);
 
             //save final document and close
-            doc.save(new File("C:\\USAWine\\New Jersey\\Tester\\" + resourceFileName));
+            doc.save(new File(outputDirectoryPath + resourceFileName));
             doc.close();
 
         }catch (IOException e){

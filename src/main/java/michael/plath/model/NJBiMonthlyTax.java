@@ -21,6 +21,8 @@ public class NJBiMonthlyTax extends PreparedForm{
     public void build() {
         //load properties
         Constants constants = new Constants();
+        String outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\";
+        //String formTemplateDirectoryPath = "N:\\MichaelProjects\\PDFTaxFiller\\src\\main\\resources\\forms\\NJ\\";
 /*
         //create new source
         FileSource ourData = new FileSourceImpl();
@@ -68,16 +70,16 @@ public class NJBiMonthlyTax extends PreparedForm{
         //merge complete forms
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
         try {
-            mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\Tester\\" + R02.resourceFileName));
-            mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\Tester\\" + R12.resourceFileName));
-            mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\Tester\\" + R08.resourceFileName));
-            mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\Tester\\" + R05.resourceFileName));
-            mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\Tester\\" + R09.resourceFileName));
-            mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\Tester\\" + R10.resourceFileName));
-            mergerUtility.addSource(new File("C:\\USAWine\\New Jersey\\Tester\\" + R57.resourceFileName));
-            mergerUtility.setDestinationFileName("C:\\USAWine\\New Jersey\\Tester\\CompleteTaxForm.pdf");
+            mergerUtility.addSource(new File(outputDirectoryPath + R02.resourceFileName));
+            mergerUtility.addSource(new File(outputDirectoryPath + R12.resourceFileName));
+            mergerUtility.addSource(new File(outputDirectoryPath + R08.resourceFileName));
+            mergerUtility.addSource(new File(outputDirectoryPath + R05.resourceFileName));
+            mergerUtility.addSource(new File(outputDirectoryPath + R09.resourceFileName));
+            mergerUtility.addSource(new File(outputDirectoryPath + R10.resourceFileName));
+            mergerUtility.addSource(new File(outputDirectoryPath + R57.resourceFileName));
+            mergerUtility.setDestinationFileName(outputDirectoryPath + "CompleteTaxForm.pdf");
             mergerUtility.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
-            PDFfile = new File("C:\\USAWine\\New Jersey\\Tester\\CompleteTaxForm.pdf");
+            PDFfile = new File(outputDirectoryPath + "CompleteTaxForm.pdf");
             //need to replace dummy fields
 
         }catch(Exception e){

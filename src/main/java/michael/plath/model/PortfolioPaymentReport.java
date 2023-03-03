@@ -13,6 +13,9 @@ import static michael.plath.model.DataSet.*;
 
 public class PortfolioPaymentReport extends Report {
 
+    public PortfolioPaymentReport(){
+        outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\";
+    }
     @Override
     public void produce() {
         XSSFWorkbook workbook = null;
@@ -89,7 +92,7 @@ public class PortfolioPaymentReport extends Report {
             }
             //can create totals here using row number, columns and =SUM formula
 
-            FileOutputStream fileOutputStream = new FileOutputStream("C:\\USAWine\\New Jersey\\Tester\\portfolioPayment.xlsx");
+            FileOutputStream fileOutputStream = new FileOutputStream(outputDirectoryPath + "portfolioPayment.xlsx");
             workbook.write(fileOutputStream);
 
         } catch (Exception e) {

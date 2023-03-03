@@ -10,6 +10,7 @@ public class R02 extends Form{
     public R02(){
         resourceFileName = "r02s.pdf";
         stateCode = "NJ";
+        outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\";
     }
 
 
@@ -65,7 +66,7 @@ public class R02 extends Form{
             form.getField("Warehouse.Address.4").setValue(warehouseCityStateZip);
 
 
-            doc.save(new File("C:\\USAWine\\New Jersey\\Tester\\" + resourceFileName));
+            doc.save(new File(outputDirectoryPath + resourceFileName));
             doc.close();
         }catch(Exception e){
             System.out.println(e.getMessage());

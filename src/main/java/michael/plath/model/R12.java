@@ -14,6 +14,7 @@ public class R12 extends Form{
     public R12(){
         resourceFileName = "r12.pdf";
         stateCode = "NJ";
+        outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\";
     }
 
 
@@ -120,7 +121,7 @@ public class R12 extends Form{
 
 
 
-            doc.save(new File("C:\\USAWine\\New Jersey\\Tester\\" + resourceFileName));
+            doc.save(new File(outputDirectoryPath + resourceFileName));
             doc.close();
         }catch(Exception e){
             System.out.println(e.getMessage());

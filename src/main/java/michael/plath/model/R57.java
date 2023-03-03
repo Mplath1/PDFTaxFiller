@@ -10,6 +10,7 @@ public class R57 extends Form{
     public R57(){
         resourceFileName = "r57.pdf";
         stateCode = "NJ";
+        outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\";
     }
 
 
@@ -28,7 +29,7 @@ public class R57 extends Form{
             //form.getField("Month.Start").setValue("Jan");
             //form.getField("Month.End").setValue("Feb");
 
-            doc.save(new File("C:\\USAWine\\New Jersey\\Tester\\" + resourceFileName));
+            doc.save(new File(outputDirectoryPath + resourceFileName));
             doc.close();
         }catch(Exception e){
             System.out.println(e.getMessage());

@@ -11,6 +11,7 @@ public class R10 extends Form{
     public R10(){
         resourceFileName = "r10.pdf";
         stateCode = "NJ";
+        outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\";
     }
 
     void build(){
@@ -22,7 +23,7 @@ public class R10 extends Form{
             form.getField("Licensee.Name").setValue(licenseeName);
             form.getField("Licensee.Number").setValue(licenseeNumber);
 
-            doc.save(new File("C:\\USAWine\\New Jersey\\Tester\\" + resourceFileName));
+            doc.save(new File(outputDirectoryPath + resourceFileName));
             doc.close();
         }catch(Exception e){
             System.out.println(e.getMessage());
