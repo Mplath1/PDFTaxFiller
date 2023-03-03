@@ -21,7 +21,7 @@ public class NJBiMonthlyTax extends PreparedForm{
     public void build() {
         //load properties
         Constants constants = new Constants();
-        String outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\";
+        String outputDirectoryPath = "N:\\MichaelProjects\\TaxOutput\\"; //TODO:LOAD FROM PROPERTIES
         //String formTemplateDirectoryPath = "N:\\MichaelProjects\\PDFTaxFiller\\src\\main\\resources\\forms\\NJ\\";
 /*
         //create new source

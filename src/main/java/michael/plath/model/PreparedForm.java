@@ -12,6 +12,7 @@ public abstract class PreparedForm {
     File PDFfile;
     List<Form> formList;
     Constants constants;
+    //TODO:ADD OVERALL TOTALS TO GLOBAL SCOPE FOR FILLING IN FIELDS APPEARING ON MULTIPLE FORMS
 
     public PreparedForm(){
         Constants constants = new Constants();

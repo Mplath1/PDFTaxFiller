@@ -25,7 +25,7 @@ public abstract class Form {
     protected PDAcroForm form;
     protected int extraPagesNeeded;
     protected File completedFile;
-    protected String outputDirectoryPath;
+    protected String outputDirectoryPath; //TODO:LOAD FROM PROPERTIES
 
     //structure of fields
     //list of root field names as array?

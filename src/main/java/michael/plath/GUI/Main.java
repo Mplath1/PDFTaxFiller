@@ -27,12 +27,14 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //FILL RETURN FORMS AND OTHER FORMS PROPERLY. TEST WITH OTHER DATA
-        //FIX R08 PAGES ISSUES.
-        //ADD PROPERTIES FOR FILE OUTPUT PATHS
-        //ADD TABLEVIEW WITH CHECKBOXES AFTER LOADING DATASET
-        String defaultSelectDirectoryPath = "N:\\MichaelProjects";
-        //TURN INTO TWO COMBOBOXES.STATE AND FORM TYPE. LOAD DATA FROM ELSEWHERE
+        //TODO:FILL RETURN FORMS AND OTHER FORMS PROPERLY. TEST WITH OTHER DATA
+        //TODO:ADD OVERALL TOTALS TO GLOBAL SCOPE FOR FILLING IN FIELDS APPEARING ON MULTIPLE FORMS
+        //TODO:FIX R08 PAGES ISSUES.
+        //TODO:ADD PROPERTIES FOR FILE OUTPUT PATHS
+        //TODO:ADD TABLEVIEW WITH CHECKBOXES AFTER LOADING DATASET
+        //TODO:CREATE NEEDED OUTPUT FOLDERS IF DO NOT EXIST
+        String defaultSelectDirectoryPath = "N:\\MichaelProjects"; //TODO:LOAD FROM PROPERTIES
+        //TODO:TURN INTO TWO COMBOBOXES.STATE AND FORM TYPE. LOAD DATA FROM ELSEWHERE
         String[] selectableFormNames = {"New Jersey Bi-Monthly Tax", "New York Monthly Tax", "California Tax"};
         Label selectableFormsLabel = new Label("Select:");
         ComboBox<PreparedForm> selectableForms = new ComboBox(FXCollections.observableArrayList(selectableFormNames));
