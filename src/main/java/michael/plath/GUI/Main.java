@@ -31,7 +31,7 @@ public class Main extends Application {
         //FIX R08 PAGES ISSUES.
         //ADD PROPERTIES FOR FILE OUTPUT PATHS
         //ADD TABLEVIEW WITH CHECKBOXES AFTER LOADING DATASET
-
+        String defaultSelectDirectoryPath = "N:\\MichaelProjects";
         //TURN INTO TWO COMBOBOXES.STATE AND FORM TYPE. LOAD DATA FROM ELSEWHERE
         String[] selectableFormNames = {"New Jersey Bi-Monthly Tax", "New York Monthly Tax", "California Tax"};
         Label selectableFormsLabel = new Label("Select:");
@@ -52,7 +52,7 @@ public class Main extends Application {
         BooleanBinding toLoadValid = Bindings.isEmpty(toLoad.textProperty());
         Button fileSelectionButton = new Button("Select");
         fileSelectionButton.setOnAction(e ->{
-        File id = new File("C:/");
+        File id = new File(defaultSelectDirectoryPath);
         FileChooser fileChooser = new FileChooser();
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Excel File","*.xlsx","*.xls"));
         fileChooser.setInitialDirectory(id);
