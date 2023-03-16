@@ -4,6 +4,7 @@ import michael.plath.core.dao.FileSource;
 import michael.plath.core.dao.FileSourceImpl;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,30 @@ public class NJBiMonthlyTax extends PreparedForm{
         name = "New Jersey Bi-Monthly Tax";
         stateCode = "NJ";
         formList = new ArrayList<Form>(); //use to add all forms and cycle to build
+        loadTallies();
+    }
+
+    @Override
+    public void loadTallies(){
+        //TODO: tallies.put(key, new Datatype) for each
+        //Retail beer and Malt total D
+        tallies.put("liquorTotal", new Double(0));//Retail liquor total D
+        //Retail still D
+        //Retail Vermouth D
+        //Retail sparkling D
+        //Retail Apple CIder D
+        //Wholesale beer and Malt total A
+        //Wholesale liquor total A
+        //Wholesale still A
+        //Wholesale Vermouth A
+        //Wholesale sparkling A
+        //Wholesale Apple CIder A
+        //Exemptions beer and Malt total E
+        //Exemptions liquor total E
+        //Exemptions still E
+        //Exemptions Vermouth E
+        //Exemptions sparkling E
+        //Exemptions Apple CIder E
     }
 
     @Override
@@ -43,7 +68,7 @@ public class NJBiMonthlyTax extends PreparedForm{
 
         //should be form factory. abstract factory once states are added
         //R02(last) R12 R08 R05 R09 R10 R57
-
+        //TODO:pass tallies to form constructor
         Form R08 = new R08(); //works, terrible design though
         Form R05 = new R05(); //works
         Form R09 = new R09(); //works
@@ -86,4 +111,9 @@ public class NJBiMonthlyTax extends PreparedForm{
             System.out.println(e.getMessage());
         }
     }
+
+//    private void fillTallies(){
+//        tallies.put("liquorTotal",Double.parseDouble(R08.form.getField("Retailer.Liquor.Control").getValueAsString()));
+//        System.out.println(tallies);
+//    }
 }
