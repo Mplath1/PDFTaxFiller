@@ -63,7 +63,7 @@ public class R08 extends Form{
 
                 field = fields.getField("Retailer.Name." + fieldCounter);
                 field.setPartialName(String.valueOf(counter));
-                //field.setValue(field.getFullyQualifiedName());
+                field.setValue(field.getFullyQualifiedName());
 
 
                 field = fields.getField("Retailer.Liquor." + fieldCounter);

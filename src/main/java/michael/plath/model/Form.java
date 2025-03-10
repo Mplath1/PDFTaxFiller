@@ -58,11 +58,12 @@ public abstract class Form {
 
     protected void merge(){
         PDFMergerUtility mergerUtility = new PDFMergerUtility();
-        int extraPagesNeeded; //FIX THIS
+        int extraPagesNeeded; //TODO:FIX THIS
         int extraRows = 59;
         try {
             mergerUtility.addSource(new File("src\\main\\resources\\forms\\" + stateCode + "\\temp\\original.pdf"));
-            extraPagesNeeded = (extraRows/24) + 1;
+            //extraPagesNeeded = (extraRows/24) + 1;
+            extraPagesNeeded = (extraRows/24) + 1 + 1 + 1;
             for(int i = extraPagesNeeded; i > 0; i--) {
                 mergerUtility.addSource(new File("src\\main\\resources\\forms\\" + stateCode + "\\temp\\" + i + ".pdf"));
             }
